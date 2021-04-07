@@ -1,0 +1,21 @@
+---
+  - hosts: all
+    become: yes
+  
+    tasks:
+      - name: Installing RVM dependencies
+        package:
+          name: software-properties-common
+
+      - name: Adding RVM repository
+        apt_repository:
+          repo: ppa:rael-gc/rvm
+          state: present
+        
+      - name: Installing RVM
+        package:
+          name: rvm
+        
+      - name: Installing RUBY
+        shell: "/usr/share/rvm/bin/rvm install {{ item }}"
+        with_items: "{{ my.tools.rvm.ruby.versions }}"

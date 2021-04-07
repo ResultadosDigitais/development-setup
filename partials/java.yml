@@ -1,0 +1,19 @@
+---
+- hosts: all
+
+  tasks:
+    - name: Installing JAVA
+      include_role:
+        name: ../roles/gantsign.java
+      vars:
+        java_is_default_installation: "{{ java_versions.default }}"
+        java_version: "{{ java_versions.version }}"
+        java_install_dir: '/opt/java'
+        java_use_local_archive: yes
+        java_fact_group_name: "java_{{ java_versions.name }}"
+        java_vendor: adoptopenjdk
+        java_implementation: hotspot
+      with_items: "{{ my.tools.java.versions }}" 
+      loop_control: 
+        loop_var: java_versions
+    

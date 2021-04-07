@@ -1,0 +1,13 @@
+---
+- hosts: all
+
+  tasks:
+    - name: Installing FORTI CLIENT VPN dependencies
+      package:
+        name: gnome-keyring
+      become: yes
+
+    - name: Installing FORTI CLIENT VPN
+      apt:
+        deb: "https://fortinetweb.s3.amazonaws.com/forticlient/downloads/FortiClientFullVPNInstaller_{{ my.tools.forticlient.version }}_amd64.deb"
+      become: yes

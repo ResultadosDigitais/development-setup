@@ -1,0 +1,66 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    - docker_group: docker
+    
+  tasks:
+    - name: Removing older DOCKER versions
+      package:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - 'docker'
+        - 'docker-engine'
+        - 'docker.io'
+        - 'containerd'
+        - 'runc'
+
+    - name: Installing DOCKER dependencies
+      package:
+        name: "{{ item }}"
+        update-cache: yes
+        autoclean: yes
+      with_items:
+        - 'apt-transport-https'
+        - 'ca-certificates'
+        - 'curl' 
+        - 'gnupg-agent'
+        - 'software-properties-common'
+
+    - name: Installing DOCKER GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Adding DOCKER repository
+      apt_repository:
+        repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable edge test'
+        state: present
+
+    - name: Installing DOCKER
+      package:
+        name: "{{ item }}"
+        update-cache: yes
+        autoclean: yes
+      with_items:
+        - 'docker-ce'
+        - 'docker-ce-cli'
+        - 'containerd.io'
+
+    - name: Creating docker group
+      group:
+        name: "{{ docker_group }}"
+        state: present
+
+    - name: Adding {{ my.data.username }} to the docker group
+      user:
+        name: "{{ my.data.username }}"
+        groups: "{{ docker_group }}"
+        append: yes
+
+    - name: Installing DOCKER-COMPOSE
+      get_url:
+        url: 'https://github.com/docker/compose/releases/download/{{ my.tools.docker_compose.version }}/docker-compose-{{ ansible_system }}-{{ ansible_machine }}'
+        dest: /usr/local/bin/docker-compose
+        mode: '+x'

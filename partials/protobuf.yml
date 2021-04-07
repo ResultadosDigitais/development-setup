@@ -1,0 +1,40 @@
+---
+- hosts: all
+  
+  tasks:
+    - name: 'Download protoc binary {{ my.tools.protobuf.version }}'
+      get_url:
+        url: https://github.com/google/protobuf/releases/download/v{{ my.tools.protobuf.version }}/protoc-{{ my.tools.protobuf.version }}-linux-x86_64.zip
+        dest: /tmp/protobuf-{{ my.tools.protobuf.version }}-linux-x86_64.zip
+
+    - name: Ensure protoc unpack directory exists
+      file:
+        path: /tmp/protoc
+        state: directory
+
+    - name: 'Unarchive protoc {{ my.tools.protobuf.version }} binary'
+      unarchive:
+        src: /tmp/protobuf-{{ my.tools.protobuf.version }}-linux-x86_64.zip
+        dest: /tmp/protoc
+        remote_src: yes
+
+    - name: Copy Protoc binary to /usr/local/bin
+      copy:
+        src: /tmp/protoc/bin/protoc
+        dest: /usr/local/bin/protoc
+        mode: 0755
+        owner: root
+        remote_src: yes
+      become: yes
+
+    - name: Copy Protoc includes to /usr/local/bin/include
+      command: cp -r /tmp/protoc/include/google /usr/local/bin/include
+      become: yes
+
+    - name: Set permissions on /usr/local/bin/include/google
+      file:
+        path: /usr/local/bin/include/google
+        mode: 0755
+        owner: root
+        recurse: yes
+      become: yes
