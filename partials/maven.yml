@@ -1,6 +1,0 @@
----
-- hosts: all
-  
-  roles:
-    - role: ../roles/gantsign.maven
-      maven_version: "{{ my.tools.maven.version }}"
