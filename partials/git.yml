@@ -1,0 +1,32 @@
+---
+- hosts: all
+
+  tasks:
+    - name: Installing GIT
+      package:
+        name: git
+      become: yes
+    
+    - name: Setting user.name
+      git_config:
+        name: "user.name"
+        value: "{{ my.data.fullname }}"
+        scope: global
+
+    - name: Setting user.email
+      git_config:
+        name: "user.email"
+        value: "{{my.data.email}}"
+        scope: global
+
+    - name: Setting mergetool.keepBackup
+      git_config:
+        name: mergetool.keepBackup 
+        value: "false"
+        scope: global
+
+    - name: Setting core.editor
+      git_config:
+        name: "core.editor"
+        value: "'/usr/bin/code' -w"
+        scope: global

@@ -1,0 +1,6 @@
+---
+- src: gantsign.visual-studio-code
+- src: gantsign.java
+- src: gantsign.golang
+- src: gantsign.maven
+- src: gantsign.intellij

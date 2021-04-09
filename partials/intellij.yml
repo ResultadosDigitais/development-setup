@@ -1,0 +1,18 @@
+---
+- hosts: all
+
+  roles:
+    - role: ../roles/gantsign.intellij
+      intellij_edition: '{{ my.tools.intellij.edition }}'
+      intellij_version: '{{ my.tools.intellij.version }}'
+      intellij_redis_sha256sum: '{{ my.tools.intellij.sha256 }}'
+      intellij_default_jdk_home: '{{ ansible_local.java_11.general.home }}'
+      intellij_default_maven_home: '{{ ansible_local.maven.general.home }}'
+      users:
+        - username: '{{ my.data.username }}'
+          intellij_jdks: 
+            - name: '11'
+              home: '{{ ansible_local.java_11.general.home }}'
+            - name: '8'
+              home: '{{ ansible_local.java_8.general.home }}'
+          intellij_default_jdk: '{{ my.tools.intellij.default_jdk }}'

@@ -1,0 +1,15 @@
+---
+- hosts: all
+  
+  tasks:
+    - name: Validating required 'my.data' variables
+      assert:
+        that:
+          - item is defined
+          - item is not none
+          - item != ""
+        fail_msg: "Verify required variables on the .../group_var/all.yml file"
+      with_items: 
+        - "{{ my.data.fullname }}"
+        - "{{ my.data.username }}"
+        - "{{ my.data.email }}"

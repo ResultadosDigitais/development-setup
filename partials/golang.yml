@@ -1,0 +1,19 @@
+---
+- hosts: all
+  roles:
+     - role: ../roles/gantsign.golang
+       golang_gopath: '{{ my.tools.golang.path }}'
+       golang_version: '{{ my.tools.golang.version }}'
+       golang_redis_sha256sum: '{{ my.tools.golang.sha256sum }}'
+
+  tasks:
+    - name: Creating GOLANG path 
+      file:
+        path: '{{ item }}'
+        owner: '{{ my.data.username }}'
+        group: '{{ my.data.username }}'
+        state: directory
+      with_items:
+        - "{{ my.tools.golang.path }}/src"
+        - "{{ my.tools.golang.path }}/bin"
+        - "{{ my.tools.golang.path }}/pkg"

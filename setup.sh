@@ -1,23 +1,10 @@
-#!/bin/bash
-cp hosts /etc/ansible/hosts
-ansible-playbook galaxy.yml
+echo "----------> Installing Ansible "
+sudo apt-get update
+sudo apt-get install -y software-properties-common ansible
 
-echo "
-[JAVA]"
-java -version
+echo "----------> Downloading Ansible roles"
+mkdir roles
+ansible-galaxy install -r requirements.yml -p ./roles --force
 
-echo "
-[MAVEN]"
-mvn -v
-
-echo "
-[NODE]"
-node -v
-
-echo "
-[DOCKER]"
-docker -v
-
-echo "
-[DOCKER COMPOSE]"
-docker-compose -v
+echo "----------> Playing Ansible playbooks"
+ansible-playbook playbook.yml -i hosts --ask-become-pass

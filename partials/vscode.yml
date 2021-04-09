@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+    - role: ../roles/gantsign.visual-studio-code
+      users:
+        - username: '{{ my.data.username }}'
+          visual_studio_code_settings: '{{ my.tools.vscode.settings }}'
+          visual_studio_code_extensions: '{{ my.tools.vscode.extensions }}'
+
